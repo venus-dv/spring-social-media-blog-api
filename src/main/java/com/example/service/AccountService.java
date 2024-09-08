@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.entity.Account;
+import com.example.exception.*;
 import com.example.repository.AccountRepository;
 
 /**
@@ -18,17 +19,17 @@ public class AccountService {
     public Account registerAccount(Account account) throws IllegalArgumentException, DuplicateUsernameException {
         // Validate that the username is not blank
         if (account.getUsername() == null || account.getUsername().trim().isEmpty()) {
-            throw new IllegalArgumentException("Username cannot be blank");
+            throw new IllegalArgumentException("");
         }
 
         // Validate that the password is at least 4 characters long
         if (account.getPassword() == null || account.getPassword().length() < 4) {
-            throw new IllegalArgumentException("Password must be at least 4 characters long");
+            throw new IllegalArgumentException("");
         }
 
         // Check if the username already exists in the database
         if (accountRepository.findByUsername(account.getUsername()).isPresent()) {
-            throw new DuplicateUsernameException("Username already exists");
+            throw new DuplicateUsernameException();
         }
 
         // Save the new account to the database
