@@ -108,4 +108,14 @@ public class MessageService {
         }
         throw new IllegalArgumentException("");
     }
+
+    /**
+     * Retrieves messages from a specific account
+     * 
+     * @param accountId The unique identifier for an account you want messages from
+     * @return A List of messages
+     */
+    public List<Message> getMessagesByAccountId(Integer accountId) {
+        return messageRepository.findByPostedBy(accountId);
+    }
 }

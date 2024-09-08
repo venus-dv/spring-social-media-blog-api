@@ -156,4 +156,19 @@ public class SocialMediaController {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
     }
+
+    /**
+     * Handles retrieving a specific message
+     * 
+     * @param accountId The unique identifier of the account the message/s belong to 
+     * @return A ResponseEntity containing a List of messages 
+     */
+    @GetMapping("/accounts/{accountId}/messages")
+    public ResponseEntity<List<Message>> getMessagesByAccountId(@PathVariable Integer accountId) {
+        // Fetch the messages
+        List<Message> messages = messageService.getMessagesByAccountId(accountId);
+
+        // Return the list of messages (empty if there are no messages)
+        return new ResponseEntity<>(messages, HttpStatus.OK);
+    }
 }
