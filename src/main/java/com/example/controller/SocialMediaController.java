@@ -10,14 +10,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-/**
- * TODO: You will need to write your own endpoints and handlers for your
- * controller using Spring. The endpoints you will need can be
- * found in readme.md as well as the test cases. You be required to use
- * the @GET/POST/PUT/DELETE/etc Mapping annotations
- * where applicable as well as the @ResponseBody and @PathVariable annotations.
- */
-
 @RestController
 public class SocialMediaController {
 
@@ -26,13 +18,6 @@ public class SocialMediaController {
 
     /**
      * Handles the registration of a new user account.
-     * 
-     * This method processes a POST request to create a new account.
-     * The request body must contain the account details in JSON format.
-     * If the registration is successful, it returns the created account along with
-     * an HTTP status of 200 (OK).
-     * If the username already exists, it returns an HTTP status of 409 (Conflict).
-     * For other validation errors, it returns an HTTP status of 400 (Bad Request).
      * 
      * @param account The account details provided in the request body (without the
      *                accountId).
@@ -51,6 +36,26 @@ public class SocialMediaController {
 
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build(); // Return 400 for validation errors
+        }
+    }
+
+    /**
+     * Handles the login for a user
+     * 
+     * @param loginRequest the account details provided in the request body (without
+     *                     the acountId).
+     * @return A ResponseEntity containing the Account object if successful,
+     *         or an appropriate error status.
+     */
+    @PostMapping("/login")
+    public ResponseEntity<Account> login(@RequestBody Account loginRequest) {
+        try {
+            Account account = accountService.login(loginRequest.getUsername(), loginRequest.getPassword());
+
+            return new ResponseEntity<>(account, HttpStatus.OK); // If successful, return the account and 200 OK
+
+        } catch (UnauthorizedException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); // Return 401 Unauthorized if login fails
         }
     }
 }
