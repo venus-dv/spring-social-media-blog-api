@@ -102,7 +102,7 @@ public class SocialMediaController {
     /**
      * Handles the retrieval of a message by its messageId
      * 
-     * @param messageId The messageId of the message to be retrieved
+     * @param messageId The unique identifier of the message to be retrieved
      * @return A ResponseEntity containing the Message object if
      *         successful, or empty.
      */
@@ -112,5 +112,20 @@ public class SocialMediaController {
 
         return message.map(ResponseEntity::ok)
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.OK));
+    }
+
+    /**
+     * Handles the deletion of a message
+     * 
+     * @param messageId the unique identifier of the message to be deleted
+     * @return A ResponseEntity containing an integer 1 if deleted, 0 if not found
+     */
+    @DeleteMapping("/messages/{messageId}")
+    public ResponseEntity<Integer> deleteMessage(@PathVariable Integer messageId) {
+        int rowsAffected = messageService.deleteMessage(messageId);
+        if (rowsAffected == 0) {
+            return new ResponseEntity<>(HttpStatus.OK); // Return 200 with empty body
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(rowsAffected);
     }
 }

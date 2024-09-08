@@ -59,12 +59,29 @@ public class MessageService {
     }
 
     /**
-     * Retrieves a message by its id 
+     * Retrieves a message by its id
      * 
      * @param messageId The unique identifier of the message to be retrieved.
      * @return The Message object with its messageId
      */
     public Optional<Message> getMessageById(Integer messageId) {
         return messageRepository.findById(messageId);
+    }
+
+    /**
+     * Deletes a message
+     * 
+     * @param messageId The messageId of the message to be deleted
+     * @return The number of rows affected by the deletion operation (1 if deleted,
+     *         0 if not found).
+     */
+    public int deleteMessage(Integer messageId) {
+        if (messageRepository.existsById(messageId)) {
+
+            messageRepository.deleteById(messageId);
+            return 1;
+        }
+        
+        return 0;
     }
 }
