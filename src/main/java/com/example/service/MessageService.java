@@ -71,7 +71,7 @@ public class MessageService {
     /**
      * Deletes a message
      * 
-     * @param messageId The messageId of the message to be deleted
+     * @param messageId The unique identifier of the message to be deleted
      * @return The number of rows affected by the deletion operation (1 if deleted,
      *         0 if not found).
      */
@@ -83,5 +83,29 @@ public class MessageService {
         }
         
         return 0;
+    }
+
+    /**
+     * Updates an existing message
+     * 
+     * @param messageId The unique identifier of the message to be updated
+     * @param newMessageText The new text for the message
+     * @return The number of rows updated, 1 if successful
+     * @throws IllegalArgumentException If the messageId does not exist or the new text is invalid.
+     */
+    public int updateMessageText(Integer messageId, String newMessageText) {
+        
+        if (messageRepository.existsById(messageId)) {
+            if (newMessageText != null && !newMessageText.isBlank() && newMessageText.length() <= 255) {
+                // Find the message
+                Message message = messageRepository.findById(messageId).orElseThrow();
+                // Update the message text
+                message.setMessageText(newMessageText);
+                messageRepository.save(message);
+                return 1;
+            }
+            throw new IllegalArgumentException("");
+        }
+        throw new IllegalArgumentException("");
     }
 }
