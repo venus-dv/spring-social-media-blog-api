@@ -2,6 +2,7 @@ package com.example.controller;
 
 import com.example.entity.*;
 import com.example.service.AccountService;
+import com.example.service.MessageService;
 import com.example.exception.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,9 @@ public class SocialMediaController {
     @Autowired
     private AccountService accountService;
 
+    @Autowired
+    private MessageService messageService;
+
     /**
      * Handles the registration of a new user account.
      * 
@@ -27,7 +31,6 @@ public class SocialMediaController {
     @PostMapping(value = "/register")
     public ResponseEntity<Account> postRegisterAccount(@RequestBody Account account) {
         try {
-            // Call the AccountService to handle registration
             Account createdAccount = accountService.registerAccount(account);
             return new ResponseEntity<>(createdAccount, HttpStatus.OK); // Return 200 OK if successful
 
@@ -56,6 +59,27 @@ public class SocialMediaController {
 
         } catch (UnauthorizedException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); // Return 401 Unauthorized if login fails
+        }
+    }
+
+    /**
+     * Handles the creation of messages
+     * 
+     * @param message the message details provided in the request body (without
+     *                     the messageId).
+     * @return A ResponseEntity containing the created Message object if successful,
+     *         or an appropriate error status.
+     */
+    @PostMapping("/messages")
+    public ResponseEntity<Message> postMessage(@RequestBody Message message) {
+        try {
+            Message createdMessage = messageService.createMessage(message);
+
+            // Return the newly created message with 200 OK status
+            return new ResponseEntity<>(createdMessage, HttpStatus.OK);
+
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
 }
