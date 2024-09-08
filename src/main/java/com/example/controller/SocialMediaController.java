@@ -5,13 +5,12 @@ import com.example.service.AccountService;
 import com.example.service.MessageService;
 import com.example.exception.*;
 
-import org.hibernate.mapping.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -138,21 +137,22 @@ public class SocialMediaController {
      * @return A ResponseEntity containing an integer 1 if updated successfully
      */
     @PatchMapping("/messages/{messageId}")
-    public ResponseEntity<String> updateMessageText(
-            @PathVariable Integer messageId, 
-            @RequestBody Map<String, String> body) {
-        String newMessageText = body.get("messageText");
-        try {
-            // Validate the message text
-            if (newMessageText == null || newMessageText.isBlank() || newMessageText.length() > 255) {
-                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-            }
+    public ResponseEntity<Integer> updateMessageText(
+            @PathVariable Integer messageId,
+            @RequestBody Map<String, String> requestBody) {
 
-            // Call the MessageService to update the message text
+        // Extract the "messageText" from the request body map
+        String newMessageText = requestBody.get("messageText");
+
+        // Validate the newMessageText input
+        if (newMessageText == null || newMessageText.isBlank()) {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST); // Return 400 for blank messageText
+        }
+
+        try {
             int rowsAffected = messageService.updateMessageText(messageId, newMessageText);
-            return new ResponseEntity<>(String.valueOf(rowsAffected), HttpStatus.OK);
+            return new ResponseEntity<>(rowsAffected, HttpStatus.OK);
         } catch (IllegalArgumentException e) {
-            // Return 400 Bad Request for invalid input
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
     }

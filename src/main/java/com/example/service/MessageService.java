@@ -96,7 +96,7 @@ public class MessageService {
     public int updateMessageText(Integer messageId, String newMessageText) {
         
         if (messageRepository.existsById(messageId)) {
-            if (newMessageText != null && !newMessageText.isBlank() && newMessageText.length() <= 255) {
+            if (newMessageText != null && !newMessageText.isEmpty() && newMessageText.length() <= 255) {
                 // Find the message
                 Message message = messageRepository.findById(messageId).orElseThrow();
                 // Update the message text
