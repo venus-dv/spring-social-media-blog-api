@@ -11,6 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class SocialMediaController {
@@ -67,7 +68,7 @@ public class SocialMediaController {
      * Handles the creation of messages
      * 
      * @param message the message details provided in the request body (without
-     *                     the messageId).
+     *                the messageId).
      * @return A ResponseEntity containing the created Message object if successful,
      *         or an appropriate error status.
      */
@@ -76,7 +77,8 @@ public class SocialMediaController {
         try {
             Message createdMessage = messageService.createMessage(message);
 
-            return new ResponseEntity<>(createdMessage, HttpStatus.OK); // Return the newly created message with 200 OK status
+            return new ResponseEntity<>(createdMessage, HttpStatus.OK); // Return the newly created message with 200 OK
+                                                                        // status
 
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
@@ -86,7 +88,8 @@ public class SocialMediaController {
     /**
      * Handles the retrieval of all messages
      * 
-     * @return A ResponseEntity containing a list of the created Message objects if successful,
+     * @return A ResponseEntity containing a list of the created Message objects if
+     *         successful,
      *         or an empty list.
      */
     @GetMapping("/messages")
@@ -94,5 +97,20 @@ public class SocialMediaController {
         List<Message> messages = messageService.getAllMessages();
 
         return new ResponseEntity<>(messages, HttpStatus.OK); // Return the list of messages with 200 OK status
+    }
+
+    /**
+     * Handles the retrieval of a message by its messageId
+     * 
+     * @param messageId The messageId of the message to be retrieved
+     * @return A ResponseEntity containing the Message object if
+     *         successful, or empty.
+     */
+    @GetMapping("/messages/{messageId}")
+    public ResponseEntity<Message> getMessageById(@PathVariable Integer messageId) {
+        Optional<Message> message = messageService.getMessageById(messageId);
+
+        return message.map(ResponseEntity::ok)
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.OK));
     }
 }

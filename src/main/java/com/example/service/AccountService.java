@@ -87,7 +87,7 @@ public class AccountService {
      * Retrieves an Account from the database by its accountId.
      * 
      * @param accountId The unique identifier of the account to be retrieved.
-     * @return The Accoun} object associated with the provided account ID, or null
+     * @return The Account object associated with the provided account ID, or null
      *         if no account with that ID exists.
      */
     public Account getAccountById(Integer accountId) {

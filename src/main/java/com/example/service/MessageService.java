@@ -7,6 +7,7 @@ import com.example.entity.Message;
 import com.example.repository.MessageRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Business rules and logic of Messages
@@ -55,5 +56,15 @@ public class MessageService {
      */
     public List<Message> getAllMessages() {
         return messageRepository.findAll();
+    }
+
+    /**
+     * Retrieves a message by its id 
+     * 
+     * @param messageId The unique identifier of the message to be retrieved.
+     * @return The Message object with its messageId
+     */
+    public Optional<Message> getMessageById(Integer messageId) {
+        return messageRepository.findById(messageId);
     }
 }
