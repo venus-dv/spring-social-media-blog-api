@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import java.util.List;
 
 @RestController
 public class SocialMediaController {
@@ -75,11 +76,23 @@ public class SocialMediaController {
         try {
             Message createdMessage = messageService.createMessage(message);
 
-            // Return the newly created message with 200 OK status
-            return new ResponseEntity<>(createdMessage, HttpStatus.OK);
+            return new ResponseEntity<>(createdMessage, HttpStatus.OK); // Return the newly created message with 200 OK status
 
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
+    }
+
+    /**
+     * Handles the retrieval of all messages
+     * 
+     * @return A ResponseEntity containing a list of the created Message objects if successful,
+     *         or an empty list.
+     */
+    @GetMapping("/messages")
+    public ResponseEntity<List<Message>> getAllMessages() {
+        List<Message> messages = messageService.getAllMessages();
+
+        return new ResponseEntity<>(messages, HttpStatus.OK); // Return the list of messages with 200 OK status
     }
 }

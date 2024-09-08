@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 import com.example.entity.Message;
 import com.example.repository.MessageRepository;
 
+import java.util.List;
+
 /**
  * Business rules and logic of Messages
  */
@@ -43,5 +45,15 @@ public class MessageService {
 
         // If all validation passes, save the message
         return messageRepository.save(message);
+    }
+
+    /**
+     * Retrieves all messages
+     * 
+     * @return A list of messages retrieved from the database if they exist, or an
+     *         empty list if there are no messages
+     */
+    public List<Message> getAllMessages() {
+        return messageRepository.findAll();
     }
 }
